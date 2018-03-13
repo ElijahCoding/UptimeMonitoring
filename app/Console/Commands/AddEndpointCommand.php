@@ -16,6 +16,6 @@ class AddEndpointCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-
+    $output->writeln('<info>works</info>');
   }
 }
