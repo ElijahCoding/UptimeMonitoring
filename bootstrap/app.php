@@ -1,4 +1,5 @@
 <?php
+use App\Models\Endpoint;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -18,11 +19,33 @@ $app = new Slim\App([
 
         'views' => [
             'cache' => getenv('VIEW_CACHE_DISABLED') === 'true' ? false : __DIR__ . '/../storage/views'
+        ],
+
+        'db' => [
+            'driver' => getenv('DB_DRIVER'),
+            'host' => getenv('DB_HOST'),
+            'database' => getenv('DB_DATABASE'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+            'port' => getenv('DB_PORT'),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
         ]
     ],
 ]);
 
 $container = $app->getContainer();
+
+$capsule = new \Illuminate\Database\Capsule\Manager;
+$capsule->addConnection($container['settings']['db']);
+
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+
+dump(\App\Models\Endpoint::get());
+
+die();
 
 $container['view'] = function ($container) {
     $view = new \Slim\Views\Twig(__DIR__ . '/../resources/views', [
