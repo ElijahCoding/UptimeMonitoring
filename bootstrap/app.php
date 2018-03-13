@@ -1,5 +1,8 @@
 <?php
+
 use App\Models\Endpoint;
+use App\Console\Commands\AddEndpointCommand;
+use Symfony\Component\Console\Application;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -43,9 +46,13 @@ $capsule->addConnection($container['settings']['db']);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-dump(\App\Models\Endpoint::get());
+$container['console'] = function () {
+  $application = new Application();
 
-die();
+  $application->add(new AddEndpointCommand());
+
+  return $application;
+};
 
 $container['view'] = function ($container) {
     $view = new \Slim\Views\Twig(__DIR__ . '/../resources/views', [
