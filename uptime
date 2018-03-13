@@ -4,6 +4,6 @@
 
 require_once 'bootstrap/app.php';
 
-$app = $container->get('console');
+// $app = $container->get('console');
 
 $app->run();
