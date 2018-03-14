@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Endpoint;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,7 +27,11 @@ class AddEndpointCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    dump($input->getOption('frequency'));
-    dump($input->getArgument('endpoint'));
+    Endpoint::create([
+      'uri' => $uri = $input->getArgument('endpoint'),
+      'frequency' => $input->getOption('frequency')
+    ]);
+
+    $output->writeln("<info>Endpoint {$uri} is now being monitored.</info>");
   }
 }
