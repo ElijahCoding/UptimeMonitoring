@@ -22,8 +22,11 @@ class PingEndpoint
     try {
       $response = $this->client->request('GET', $this->endpoint->uri);
     } catch (RequestException $e) {
-      dump($e->getResponse()->getStatusCode());
+      $response = $e->getResponse();
     }
 
+    $this->endpoint->statuses()->create([
+      'status_code' => $response->getStatusCode()
+    ]);
   }
 }

@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Endpoint extends Model
 {
   protected $guarded = [];
+
+  public function statuses()
+  {
+    return $this->hasMany(Status::class)->orderBy('created_at', 'desc');
+  }
 }
