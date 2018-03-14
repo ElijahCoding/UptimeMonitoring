@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Endpoint;
+use App\Console\Commands\Run;
 use App\Console\Commands\AddEndpointCommand;
 use Symfony\Component\Console\Application;
 
@@ -46,10 +47,20 @@ $capsule->addConnection($container['settings']['db']);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-$container['console'] = function () {
+$container['guzzle'] = function () {
+  return new GuzzleHttp\Client();
+};
+
+$container['console'] = function ($container) {
   $application = new Application();
 
   $application->add(new AddEndpointCommand());
+
+  $application->add(
+    new Run(
+      $container->guzzle
+    )
+  );
 
   return $application;
 };
