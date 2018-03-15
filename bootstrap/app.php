@@ -2,6 +2,7 @@
 
 use App\Models\Endpoint;
 use App\Console\Commands\Run;
+use App\Console\Commands\StatusCommand;
 use App\Console\Commands\AddEndpointCommand;
 use Symfony\Component\Console\Application;
 
@@ -55,6 +56,7 @@ $container['console'] = function ($container) {
   $application = new Application();
 
   $application->add(new AddEndpointCommand());
+  $application->add(new StatusCommand());
 
   $application->add(
     new Run(
