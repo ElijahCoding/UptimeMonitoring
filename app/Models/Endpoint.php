@@ -12,4 +12,9 @@ class Endpoint extends Model
   {
     return $this->hasMany(Status::class)->orderBy('created_at', 'desc');
   }
+
+  public function status()
+  {
+    return $this->hasOne(Status::class)->orderBy('created_at', 'desc');
+  }
 }
