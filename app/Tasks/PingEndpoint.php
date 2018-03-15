@@ -3,10 +3,11 @@
 namespace App\Tasks;
 
 use GuzzleHttp\Client;
+use App\Scheduler\Task;
 use App\Models\Endpoint;
 use GuzzleHttp\Exception\RequestException;
 
-class PingEndpoint
+class PingEndpoint extends Task
 {
   protected $client;
   protected $endpoint;

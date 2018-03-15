@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Endpoint;
 use App\Tasks\PingEndpoint;
+use App\Scheduler\Kernel;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,10 +30,16 @@ class Run extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
+    $kernel = new Kernel;
+
     $endpoints = Endpoint::get();
 
     foreach ($endpoints as $endpoint) {
-      (new PingEndpoint($endpoint, $this->client))->handle();
+      $kernel->add(
+        new PingEndpoint($endpoint, $this->client)
+      )->everyMinutes($endpoint->frequency);
     }
+
+    $kernel->run();
   }
 }
