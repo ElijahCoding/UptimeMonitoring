@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Status;
 use App\Models\Endpoint;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Command\Command;
@@ -41,8 +42,26 @@ class StatusCommand extends Command
   {
     return [
       'created_at' => $endpoint->status->created_at,
-      'status' => 'up',
-      'status_code' => $endpoint->status->status_code
+      'status' => $this->formatStatus($endpoint->status),
+      'status_code' => $this->formatResponseCode($endpoint->status),
     ];
   }
+
+    protected function formatStatus(Status $status)
+    {
+        if ($status->isDown()) {
+            return '<error>Down</error>';
+        }
+
+        return '<bg=green;fg=black>Up</>';
+    }
+
+    protected function formatResponseCode(Status $status)
+    {
+        if ($status->isDown()) {
+            return "<error>{$status->status_code}</error>";
+        }
+
+        return "<bg=green;fg=black>{$status->status_code}</>";
+    }
 }
