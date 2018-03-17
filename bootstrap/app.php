@@ -4,6 +4,7 @@ use App\Models\Endpoint;
 use App\Console\Commands\Run;
 use App\Console\Commands\StatusCommand;
 use App\Console\Commands\AddEndpointCommand;
+use App\Listeners\EndpointDownSMSNotification;
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -52,7 +53,10 @@ $capsule->bootEloquent();
 $container['dispatcher'] = function () {
   $dispatcher = new EventDispatcher();
 
-  // Add listeners
+  $dispatcher->addListener(
+    'endpoint.down', [new EndpointDownSMSNotification(), 'handle']
+  );
+
 
   return $dispatcher;
 };
