@@ -73,7 +73,8 @@ $container['console'] = function ($container) {
 
   $application->add(
     new Run(
-      $container->guzzle
+      $container->guzzle,
+      $container->dispatcher
     )
   );
 
