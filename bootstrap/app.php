@@ -5,6 +5,7 @@ use App\Console\Commands\Run;
 use App\Console\Commands\StatusCommand;
 use App\Console\Commands\AddEndpointCommand;
 use Symfony\Component\Console\Application;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -47,6 +48,14 @@ $capsule->addConnection($container['settings']['db']);
 
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
+
+$container['dispatcher'] = function () {
+  $dispatcher = new EventDispatcher();
+
+  // Add listeners
+
+  return $dispatcher;
+};
 
 $container['guzzle'] = function () {
   return new GuzzleHttp\Client();
